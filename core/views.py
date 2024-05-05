@@ -126,3 +126,182 @@ def aire_sanitaire_update(request, pk):
             form.save()
         return redirect('core:aire_sanitaire_list')
     return render(request,'aire_sanitaire_create.html',{'form':form,'view':view})
+
+def enfant_create(request):
+    view='Entrer'
+    form = EnfantForm()
+    if request.method =="POST":
+        form = EnfantForm(request.POST)
+        if form.is_valid():
+            enfant = form.save()
+            context={
+                'enfant':enfant
+            }
+            return render(request,'enfant_suite.html',context)
+    return render(request,'enfant_create.html',{'form':form,'view':view})
+
+def etat_initial_create(request,pk):
+    view="Nouveau Prelevement"
+    enfant = Enfant.objects.get(pk=pk)
+    form = PrelevementForm()
+    context={
+        'form':form,
+        'enfant':enfant,
+        'view':view
+    }
+    if request.method=="POST":
+        form = PrelevementForm(request.POST)
+        if form.is_valid():
+            prelevement= form.save(commit=False)
+
+            #methode modele
+
+            taille_en_cm = form.cleaned_data['taille_en_cm']
+            taille_en_m= taille_en_cm/100
+            poids = form.cleaned_data['poids']
+            if enfant.age_en_annee > 0:
+                pa= poids/enfant.age_en_annee
+            else :
+                pa= 1
+            prelevement.code_id = enfant
+            prelevement.code_aire = enfant.code_aire
+            prelevement.taille_en_m = taille_en_m
+            prelevement.pa = pa
+            prelevement.save()
+            EtatInital.objects.create(
+                taille_en_m= taille_en_m,
+                pa=pa,
+                poids=prelevement.poids,
+                taille_en_cm=prelevement.taille_en_cm,
+                pb=prelevement.pb,
+                oedeme_nutri=prelevement.oedeme_nutri,
+                classification=prelevement.classification,
+                code_id=enfant
+            )
+            context={
+                'enfant':enfant,
+                'prelevement':prelevement,
+                'view':view
+            }
+            return render(request,'enfant_suite.html',context)
+    return render(request,'prelevement_create.html',context)
+
+def prelevement_create(request,pk):
+    view="Nouveau Prelevement"
+    enfant = Enfant.objects.get(pk=pk)
+    form = PrelevementForm()
+    context={
+        'form':form,
+        'enfant':enfant,
+        'view':view
+    }
+    if request.method=="POST":
+        form = PrelevementForm(request.POST)
+        if form.is_valid():
+            prelevement= form.save(commit=False)
+             #methode modele
+
+            taille_en_cm = form.cleaned_data['taille_en_cm']
+            taille_en_m= taille_en_cm/100
+            poids = form.cleaned_data['poids']
+            if enfant.age_en_annee > 0:
+                pa= poids/enfant.age_en_annee
+            else :
+                pa= 1
+            prelevement.code_id = enfant
+            prelevement.code_aire = enfant.code_aire
+            prelevement.taille_en_m = taille_en_m
+            prelevement.pa = pa
+            prelevement.save()
+            context={
+                'enfant':enfant,
+                'prelevement':prelevement,
+                'view':view
+            }
+            return redirect('core:prelevement_list', enfant.code_id)
+    return render(request,'prelevement_create.html',context)
+
+def analyse_sanguine_create(request,pk):
+    view ="Nouvelle analyse"
+    enfant = Enfant.objects.get(pk=pk)
+    form = AnalyseSanguineForm()
+    context ={
+        'form':form,
+        'enfant':enfant,
+        'view':view,
+    }
+    if request.method=="POST":
+        form = AnalyseSanguineForm(request.POST)
+        if form.is_valid():
+            analyse_sanguine = form.save(commit=False)
+            analyse_sanguine.code_id = enfant
+            analyse_sanguine.code_aire = enfant.code_aire
+            analyse_sanguine.save()
+            context={
+                'enfant':enfant,
+                'analyse_sanguine':analyse_sanguine,
+                'view':view,
+            }
+            return render(request,'enfant_suite.html',context)
+    return render(request,'analyse_sanguine_create.html',context)
+
+def enfant_search(request):
+    form= EnfantSearchForm()
+    context={
+        'form':form
+    }
+    if request.method=="POST":
+        form = EnfantSearchForm(request.POST)
+        if form.is_valid():
+            nom = form.cleaned_data['name']
+            prenom = form.cleaned_data['prenom']
+            postnom = form.cleaned_data['postnom']
+            enfants = Enfant.objects.filter(nom=nom, prenom=prenom,postnom=postnom)
+            context = {
+                'enfants':enfants,
+                'form':form,
+            }
+            return render(request,'enfant_search.html',context)
+    return render(request,'enfant_search.html',context)
+
+def prelevement_list(request,pk):
+    enfant = Enfant.objects.get(pk=pk)
+    prelevements = Prelevement.objects.filter(code_id = enfant)
+    context = {
+        'prelevements':prelevements,
+        'enfant':enfant,
+    }
+    return render(request,'prelevement_list.html',context)
+
+def prelevement_delete(request,pk,id):
+    enfant = Enfant.objects.get(pk=pk)
+    prelevement = Prelevement.objects.get(pk=id)
+    context={
+        'enfant':enfant,
+        'prelevement':prelevement,
+    }
+    if request.method=="POST":
+        prelevement.delete()
+        return redirect('core:prelevement_list',enfant.code_id)
+    return render(request,'prelevement_delete.html',context)
+
+def analyse_sanguine_list(request,pk):
+    enfant = Enfant.objects.get(pk=pk)
+    analyse_sanguines = AnalyseSanguine.objects.filter(code_id = enfant)
+    context = {
+        'analyse_sanguines':analyse_sanguines,
+        'enfant':enfant,
+    }
+    return render(request,'analyse_sanguine_list.html',context)   
+
+def analyse_sanguine_delete(request,pk,id):
+    enfant = Enfant.objects.get(pk=pk)
+    analyse_sanguine = AnalyseSanguine.objects.get(pk=id)
+    context={
+        'enfant':enfant,
+        'analyse_sanguine':analyse_sanguine,
+    }
+    if request.method=="POST":
+        analyse_sanguine.delete()
+        return redirect('core:analyse_sanguine_list',enfant.code_id)
+    return render(request,'analyse_sanguine_delete.html',context)

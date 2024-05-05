@@ -19,5 +19,15 @@ urlpatterns = [
     path('index/aire-sanitaire/list/',aire_sanitaire_list,name='aire_sanitaire_list'),
     path("index/aire-sanitaire/add/", aire_sanitaire_create, name="aire_sanitaire_create"),
     path("index/aire-sanitaire/<int:pk>/update", aire_sanitaire_update, name="aire_sanitaire_update"),
+    path("index/Enfant/add/", enfant_create, name="enfant_create"),
+    path("index/Enfant/<int:pk>/Etat-initial/add/",etat_initial_create, name="etat_initial_create"),
+    path("index/Enfant/<int:pk>/analyse-sanguine/add/",analyse_sanguine_create, name="analyse_sanguine_create"),
+    path("index/Enfant/search/",enfant_search, name="enfant_search"),
+    path("index/Enfant/<int:pk>/prelevement/list/",prelevement_list, name="prelevement_list"),
+    path("index/Enfant/<int:pk>/prelevement/add/",prelevement_create, name="prelevement_create"),
+    path("index/Enfant/<int:pk>/prelevement/<int:id>/delete/",prelevement_delete, name="prelevement_delete"),
+    path("index/Enfant/<int:pk>/prelevement/<int:id>/delete/",prelevement_delete, name="prelevement_delete"),
+    path("index/Enfant/<int:pk>/analyse-sanguine/list/",analyse_sanguine_list, name="analyse_sanguine_list"),
+    path("index/Enfant/<int:pk>/analyse-sanguine/<int:id>/delete/",analyse_sanguine_delete, name="analyse_sanguine_delete"),
 ]
 

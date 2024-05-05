@@ -21,3 +21,15 @@ class EnfantAdmin(admin.ModelAdmin):
     list_display = ('code_id','nom', 'postnom', 'prenom', 'date_naissance', 'quartier')
     empty_value_display = '-empty-'
     list_filter = ['code_id']
+
+@admin.register(Prelevement)
+class PrelevementAdmin(admin.ModelAdmin):
+    list_display =['numero',"qte_spiruline_recue",'date_prelevement']
+
+@admin.register(AnalyseSanguine)
+class AnalyseSanguineAdmin(admin.ModelAdmin):
+    list_display=['date','hemoglobine','albumine','code_id','code_aire']
+
+@admin.register(EtatInital)
+class EtatInitialAdmin(admin.ModelAdmin):
+    list_display=['numero','date_prelevement','code_id']
