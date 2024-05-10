@@ -24,7 +24,7 @@ class EnfantAdmin(admin.ModelAdmin):
 
 @admin.register(Prelevement)
 class PrelevementAdmin(admin.ModelAdmin):
-    list_display =['numero',"qte_spiruline_recue",'date_prelevement']
+    list_display =['numero',"qte_spiruline_recue",'date_prelevement','code_id']
 
 @admin.register(AnalyseSanguine)
 class AnalyseSanguineAdmin(admin.ModelAdmin):

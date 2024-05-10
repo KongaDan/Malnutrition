@@ -4,6 +4,10 @@ from .forms import *
 from django.contrib.auth import login,authenticate,logout
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from datetime import datetime,timedelta
+date_actuelle = datetime.now().date()
+deux_semaines= timedelta(weeks=2)
+
 
 @login_required
 def index(request):
@@ -190,10 +194,20 @@ def prelevement_create(request,pk):
     view="Nouveau Prelevement"
     enfant = Enfant.objects.get(pk=pk)
     form = PrelevementForm()
+    prelevement_last= Prelevement.objects.filter(code_id=enfant).last()
+    if prelevement_last:
+        if date_actuelle - prelevement_last.date_prelevement >= deux_semaines:
+            permis = True
+        else :
+            permis = False
+    else :
+        permis = True
     context={
         'form':form,
         'enfant':enfant,
-        'view':view
+        'view':view,
+        'prelevement_last':prelevement_last,
+        'permis':permis,
     }
     if request.method=="POST":
         form = PrelevementForm(request.POST)
@@ -225,10 +239,23 @@ def analyse_sanguine_create(request,pk):
     view ="Nouvelle analyse"
     enfant = Enfant.objects.get(pk=pk)
     form = AnalyseSanguineForm()
+    analyse_sanguine_last = AnalyseSanguine.objects.filter(code_id = enfant).last()
+    if analyse_sanguine_last:
+        if date_actuelle.month > analyse_sanguine_last.date.month:
+            if date_actuelle.day >= analyse_sanguine_last.date.day:
+                permis=True
+            else:
+                permis= False
+        else:
+            permis=False
+    else:
+        permis=True
     context ={
         'form':form,
         'enfant':enfant,
         'view':view,
+        'analyse_sanguine_last':analyse_sanguine_last,
+        'permis':permis,
     }
     if request.method=="POST":
         form = AnalyseSanguineForm(request.POST)

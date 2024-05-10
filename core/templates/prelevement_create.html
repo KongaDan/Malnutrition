@@ -39,9 +39,18 @@
     >
         <div class="row  ">
             <div class="d-flex   justify-content-center col">
+              {% if permis %}
               <button type="submit" class="btn btn-success">
                 Enregistrer
               </button>
+              {% else %}
+              <div class='col'>
+                Le dernier prelevement date du {{prelevement_last.date_prelevement}}, vous devez attendre 2 semaines a partir de cette date.
+              </div>
+              <button type="submit" class=" col-4 btn btn-success disabled">
+                Enregistrer
+              </button>
+              {% endif %}
             </div>
         </div>
     </div>

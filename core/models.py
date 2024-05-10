@@ -161,7 +161,7 @@ class EtatInital(models.Model):
 class AnalyseSanguine(models.Model):
     date = models.DateField(null=False, auto_now_add=True)
     annee = models.IntegerField(null=False)
-    mois = models.CharField(null=True, max_length=20)
+    mois = models.IntegerField(null=True)
     hemoglobine = models.FloatField(null=False)
     albumine = models.FloatField(null=False)
     azote_urique_sang = models.FloatField(null=False)

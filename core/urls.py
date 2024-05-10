@@ -26,7 +26,6 @@ urlpatterns = [
     path("index/Enfant/<int:pk>/prelevement/list/",prelevement_list, name="prelevement_list"),
     path("index/Enfant/<int:pk>/prelevement/add/",prelevement_create, name="prelevement_create"),
     path("index/Enfant/<int:pk>/prelevement/<int:id>/delete/",prelevement_delete, name="prelevement_delete"),
-    path("index/Enfant/<int:pk>/prelevement/<int:id>/delete/",prelevement_delete, name="prelevement_delete"),
     path("index/Enfant/<int:pk>/analyse-sanguine/list/",analyse_sanguine_list, name="analyse_sanguine_list"),
     path("index/Enfant/<int:pk>/analyse-sanguine/<int:id>/delete/",analyse_sanguine_delete, name="analyse_sanguine_delete"),
 ]

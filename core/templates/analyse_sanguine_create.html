@@ -50,9 +50,18 @@
     >
         <div class="row  ">
             <div class="d-flex   justify-content-center col">
+              {% if permis %}
               <button type="submit" class="btn btn-success">
                 Enregistrer
               </button>
+              {% else %}
+              <div class='col'>
+              La derniere analyse sanguine date du {{analyse_sanguine_last.date}}, vous devez attendre 1 mois a partir de cette date.
+              </div>
+              <button type="submit" class=" col-4 btn btn-success disabled">
+                Enregistrer
+              </button>
+              {% endif %}
             </div>
         </div>
     </div>
